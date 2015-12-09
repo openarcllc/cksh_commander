@@ -5,17 +5,26 @@
 CKSHCommander is a Ruby gem that simplifies the task of processing [Slack slash
 commands](https://api.slack.com/slash-commands). It provides a class-based
 convention for authoring command handlers, and it supports basic subcommands and
-arguments.
+arguments. Check out the
+[cksh_command_api](https://github.com/openarcllc/cksh_commander_api) repository to see a dead simple Sinatra API
+that comes bootstrapped with everything you need to process Slack slash
+commands using this gem.
 
-## Installation
+### Installation
 
-You can install `cksh_commander` via RubyGems.
+You can install `cksh_commander` via RubyGems. In your Gemfile:
 
 ```ruby
 gem 'cksh_commander'
 ```
 
-## Usage
+Or from a command line:
+
+```
+gem install cksh_commander
+```
+
+### Usage
 
 Defining a custom command is easy. First, create a `commands/` directory and tell
 `CKSHCommander` where it can find your commands. Let's say we've created a `commands/`
@@ -111,12 +120,12 @@ post "/" do
 end
 ```
 
-## Development
+### Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-## Contributing
+### Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/openarcllc/cksh_commander.
