@@ -7,11 +7,11 @@ Gem::Specification.new do |spec|
   spec.name          = "cksh_commander"
   spec.version       = CKSHCommander::VERSION
   spec.authors       = ["Travis Loncar"]
-  spec.email         = ["travisloncar@openarc.net"]
+  spec.email         = ["travis@openarc.net"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Process Slack slash commands with ease.}
+  spec.description   = %q{Process Slack slash commands with ease.}
+  spec.homepage      = "https://github.com/openarcllc/cksh_commander"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
