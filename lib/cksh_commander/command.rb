@@ -4,11 +4,19 @@ module CKSHCommander
   class Command
     class << self
       attr_accessor :token
+      attr_reader :docs
 
       def set(opts)
         opts.each do |k,v|
-          send("#{k}=", v) if respond_to?(k)
+          send("#{k}=", v) if respond_to?("#{k}=")
         end
+      end
+
+      # Define command usage/description documentation
+      # for output in 'help' command.
+      def desc(usage, description)
+        @docs ||= []
+        @docs << { usage: usage, desc: description }
       end
     end
 
@@ -62,6 +70,14 @@ module CKSHCommander
       @response
     end
 
+    def help
+      if self.class.docs.any?
+        set_response_text(help_output)
+      else
+        set_response_text("Add some documentation!")
+      end
+    end
+
     def authenticated?
       self.class.token && self.class.token == data.token
     end
@@ -85,7 +101,25 @@ module CKSHCommander
     private
 
     def subcommand_methods
-      methods - CKSHCommander::Command.new.methods
+      custom = (methods - CKSHCommander::Command.new.methods)
+      custom.concat([:help])
+    end
+
+    def help_output
+      docs = self.class.docs
+      output = "```\n"
+
+      # Ensure that descriptions are justified properly.
+      just = docs.max_by { |d|
+        d[:usage].size
+      }[:usage].size + @data.command.size + 3
+
+      # Add output for each documented command.
+      docs.each do |d|
+        output += "#{@data.command} #{d[:usage]}".ljust(just) + "# #{d[:desc]}\n"
+      end
+
+      output += "```"
     end
   end
 end

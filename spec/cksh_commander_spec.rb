@@ -64,4 +64,16 @@ describe CKSHCommander do
     response = CKSHCommander::Runner.run("test", params)
     expect(response.text).to eq("Test 3: awesomesauce #{spaced}")
   end
+
+  it 'provides the correct output for the "help" subcommand' do
+    params = paramstub.merge({ "text" => "help" })
+    response = CKSHCommander::Runner.run("test", params)
+
+    expected = "```\n"
+    expected += "/test test0         # Description.\n"
+    expected += "/test test1 [TEXT]  # Description.\n"
+    expected += "```"
+
+    expect(response.text).to eq(expected)
+  end
 end

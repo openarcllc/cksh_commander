@@ -71,18 +71,21 @@ module Example
 
     # Subcommand with no arguments
     # SLACK: /example test0
+    desc "test0", "Subcommand 0 description."
     def test0
       set_response_text("Subcommand: test0")
     end
 
     # Subcommand with one argument
     # SLACK: /example test1 text
+    desc "test1 [TEXT]", "Subcommand 1 description."
     def test1(text)
       set_response_text("Subcommand: test1; Text: #{text}")
     end
 
     # No subcommand with one argument
     # SLACK: /example text
+    desc "[TEXT]", "Root command description."
     def ___(text)
       set_response_text("Root command; Text: #{text}")
     end
@@ -93,8 +96,18 @@ end
 We set our slash command authentication token at the class level, and define
 methods for processing subcommands. Attachments (which take the form of a hash)
 can be added using `add_response_attachment(attachment)`. You can also set the
-response to `'in_channel'` at the method level with `respond_in_channel!`. See
-`CKSHCommander::Command` for the full implementation.
+response to `'in_channel'` at the method level with `respond_in_channel!`.
+
+Similar to [Thor](http://whatisthor.com/), we are able to document our
+command's API with the class-level `desc` method—as is shown in the example
+above. CKSHCommander provides a `help` subcommand out of the box, and this will
+echo the documentation back to the Slack user.
+
+```
+/example test0         # Subcommand 0 description.
+/example test1 [TEXT]  # Subcommand 1 description.
+/example [TEXT]        # Root command description.
+```
 
 To run a command, we use `CKSHCommander::Runner`. In the example below, we've
 created a simple Sinatra app to illustrate its usage with the standard Slack
