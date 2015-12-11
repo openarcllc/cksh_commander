@@ -22,6 +22,11 @@ module Test
       set_response_text("Test 3: #{text1}#{text2} #{text3}")
     end
 
+    def test4(text1, optional = nil)
+      content = optional || text1
+      set_response_text("Test 4: #{content}")
+    end
+
     def ___(text)
       set_response_text("___: #{text}")
     end
