@@ -46,7 +46,7 @@ module CKSHCommander
       # method and its arity. Represent the original subcommand string.
       subcommand = matched_subcommands.max_by(&:size).to_s
       subcommand_m = method(subcommand)
-      subcommand_a = subcommand_m.arity
+      subcommand_a = subcommand_m.arity.abs
       subcommand_o = subcommand.gsub(/_/, ' ')
 
       # Get argument string and slurp up arguments using arity. We
@@ -54,10 +54,10 @@ module CKSHCommander
       argstr, args = @data.text.gsub(subcommand_o, '').strip, []
       subcommand_a.times do |i|
         if i + 1 == subcommand_a
-          args << argstr
+          args << (argstr.empty? ? nil : argstr)
         else
           arg = argstr.split(' ')[0]
-          argstr.gsub!(Regexp.new("\\A#{arg} "), '')
+          argstr.gsub!(Regexp.new("\\A#{arg}\s?"), '')
           args << arg
         end
       end
