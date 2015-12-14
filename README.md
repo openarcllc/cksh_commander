@@ -93,10 +93,27 @@ module Example
 end
 ```
 
-We set our slash command authentication token at the class level, and define
+We `set` our slash command authentication token at the class level, and define
 methods for processing subcommands. Attachments (which take the form of a hash)
 can be added using `add_response_attachment(attachment)`. You can also set the
 response to `'in_channel'` at the method level with `respond_in_channel!`.
+
+Use `authorize` to whitelist the user IDs of Slack users whom you've authorized
+to perform a subcommand. An unauthorized user who tries to use this subcommand will
+receive the response, "You are unauthorized to use this subcommand!" You can
+find the IDs of Slack users on your team using
+[Slack's REST API](https://slack.com/api/users.list?token=YOURTOKEN). Note that
+authorization is not performed unless `authorize` is used explicitly.
+
+```ruby
+...
+desc "privatecmd", "A private subcommand."
+def privatecmd
+  authorize(%w[U2147483697])
+  set_response_text("You are authorized!")
+end
+...
+```
 
 We can access the Slack payload data via the `data` reader.
 

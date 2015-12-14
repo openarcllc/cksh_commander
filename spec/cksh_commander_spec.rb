@@ -86,4 +86,14 @@ describe CKSHCommander do
 
     expect(response.text).to eq(expected)
   end
+
+  it 'performs user ID authorization at the subcommand level' do
+    params = paramstub.merge({ "text" => "testprivate" })
+    response = CKSHCommander::Runner.run("test", params)
+    expect(response.text).to eq("You are unauthorized to use this subcommand!")
+
+    params = params.merge({ "user_id" => "AUTHORIZED" })
+    response = CKSHCommander::Runner.run("test", params)
+    expect(response.text).to eq("You are authorized!")
+  end
 end

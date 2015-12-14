@@ -27,6 +27,11 @@ module Test
       set_response_text("Test 4: #{content}")
     end
 
+    def testprivate
+      authorize(["AUTHORIZED"])
+      set_response_text("You are authorized!")
+    end
+
     def ___(text)
       set_response_text("___: #{text}")
     end
