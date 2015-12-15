@@ -13,8 +13,13 @@ module CKSHCommander
 
         response = cmd.authenticated? ? cmd.run : Response.new("Invalid token!")
       rescue => e
-        text = cmd && cmd.debugging? ? e.message :
-          cmd ? cmd.error_message : "Command not found..."
+        text = if e.is_a?(UnauthorizedError)
+          "You are unauthorized to use this subcommand!"
+        else
+          cmd && cmd.debugging? ? e.message :
+            cmd ? cmd.error_message : "Command not found..."
+        end
+
         response = Response.new(text)
       end
 

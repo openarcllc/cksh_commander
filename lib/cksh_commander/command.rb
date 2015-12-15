@@ -24,7 +24,6 @@ module CKSHCommander
 
     def initialize(data = nil)
       @data = data
-      @authorized = true
       @debugging = false
       @response = Response.new
     end
@@ -85,12 +84,10 @@ module CKSHCommander
     end
 
     def set_response_text(text)
-      return unless @authorized
       @response.text = text
     end
 
     def add_response_attachment(attachment)
-      return unless @authorized
       unless attachment.is_a?(Hash)
         raise ArgumentError, "Attachment must be a Hash"
       end
@@ -99,17 +96,14 @@ module CKSHCommander
     end
 
     def respond_in_channel!
-      return unless @authorized
       @response.type = 'in_channel'
     end
 
     # Authorize users to use a subcommand by
     # whitelisting user IDs.
     def authorize(ids)
-      @authorized = ids.any? { |id| @data.user_id == id }
-      unless @authorized
-        @response = Response.new("You are unauthorized to use this subcommand!")
-      end
+      authorized = ids.any? { |id| @data.user_id == id }
+      raise UnauthorizedError unless authorized
     end
 
     def debug!
@@ -149,4 +143,6 @@ module CKSHCommander
       output += "```"
     end
   end
+
+  class UnauthorizedError < StandardError; end
 end
