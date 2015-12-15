@@ -1,5 +1,6 @@
 ## :stars: Sla[CK] Sla[SH] Commander
 
+[![Build Status](https://travis-ci.org/openarcllc/cksh_commander.svg)]()
 [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)]()
 
 CKSHCommander is a Ruby gem that simplifies the task of processing [Slack slash
