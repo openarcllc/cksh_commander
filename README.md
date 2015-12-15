@@ -10,6 +10,15 @@ arguments. Check out the
 that comes bootstrapped with everything you need to process Slack slash
 commands using this gem.
 
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Getting Started](#getting-started)
+  - [Command API](#command-api)
+  - [Running a Command](#running-a-command)
+- [Examples](#examples)
+- [Development](#development)
+- [Contributing](#contributing)
+
 ### Installation
 
 You can install `cksh_commander` via RubyGems. In your Gemfile:
@@ -25,6 +34,8 @@ gem install cksh_commander
 ```
 
 ### Usage
+
+#### Getting Started
 
 Defining a custom command is easy. First, create a `commands/` directory and tell
 `CKSHCommander` where it can find your commands. Let's say we've created a `commands/`
@@ -93,27 +104,12 @@ module Example
 end
 ```
 
+#### Command API
+
 We `set` our slash command authentication token at the class level, and define
 methods for processing subcommands. Attachments (which take the form of a hash)
 can be added using `add_response_attachment(attachment)`. You can also set the
 response to `'in_channel'` at the method level with `respond_in_channel!`.
-
-Use `authorize` to whitelist the user IDs of Slack users whom you've authorized
-to perform a subcommand. An unauthorized user who tries to use this subcommand will
-receive the response, "You are unauthorized to use this subcommand!" You can
-find the IDs of Slack users on your team using
-[Slack's REST API](https://slack.com/api/users.list?token=YOURTOKEN). Note that
-authorization is not performed unless `authorize` is used explicitly.
-
-```ruby
-...
-desc "privatecmd", "A private subcommand."
-def privatecmd
-  authorize(%w[U2147483697])
-  set_response_text("You are authorized!")
-end
-...
-```
 
 We can access the Slack payload data via the `data` reader.
 
@@ -140,6 +136,43 @@ echo the documentation back to the Slack user.
 /example test1 [TEXT]  # Subcommand 1 description.
 /example [TEXT]        # Root command description.
 ```
+Use `authorize` to whitelist the user IDs of Slack users whom you've authorized
+to perform a subcommand. An unauthorized user who tries to use this subcommand will
+receive the response, "You are unauthorized to use this subcommand!" You can
+find the IDs of Slack users on your team using
+[Slack's REST API](https://slack.com/api/users.list?token=YOURTOKEN). Note that
+authorization is not performed unless `authorize` is used explicitly.
+
+```ruby
+...
+desc "privatecmd", "A private subcommand."
+def privatecmd
+  authorize(%w[U2147483697])
+  set_response_text("You are authorized!")
+end
+...
+```
+
+If you need to debug a subcommand and forward a caught exception to your Slack
+client, you can use `debug!` at the top of your subcommand's method body.
+Otherwise, exceptions at the subcommand level will result in the `set` error
+message text being returned to the client. Using `debug!` like this allows you
+to isolate testing to a single subcommand without disrupting all usage of the
+slash command.
+
+```ruby
+...
+set error_message: "Hm. Something went wrong!"
+
+def subcommand
+  debug!
+  undefined_method #=> NameError
+  set_response_text("Never evaluated...")
+end
+...
+```
+
+#### Running a Command
 
 To run a command, we use `CKSHCommander::Runner`. In the example below, we've
 created a [simple Sinatra app](https://github.com/openarcllc/cksh_commander_api)

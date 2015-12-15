@@ -96,4 +96,16 @@ describe CKSHCommander do
     response = CKSHCommander::Runner.run("test", params)
     expect(response.text).to eq("You are authorized!")
   end
+
+  it 'propagates error messages properly when debugging' do
+    params = paramstub.merge({ "text" => "testerrordebugging" })
+    response = CKSHCommander::Runner.run("test", params)
+    expect(response.text).to include("nomethod")
+  end
+
+  it 'displays a set error message when not debugging' do
+    params = paramstub.merge({ "text" => "testerror" })
+    response = CKSHCommander::Runner.run("test", params)
+    expect(response.text).to eq("Bad news...")
+  end
 end

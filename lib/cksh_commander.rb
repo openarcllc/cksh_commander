@@ -21,11 +21,7 @@ module CKSHCommander
     attr_accessor :commands_path
 
     def initialize
-      @commands_path = nil
-    end
-
-    def commands_path
-      @commands_path || "../commands"
+      @commands_path = "../commands"
     end
   end
 end

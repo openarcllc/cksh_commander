@@ -3,7 +3,7 @@ require "cksh_commander/response"
 module CKSHCommander
   class Command
     class << self
-      attr_accessor :token
+      attr_accessor :token, :error_message
       attr_reader :docs
 
       def set(opts)
@@ -25,6 +25,7 @@ module CKSHCommander
     def initialize(data = nil)
       @data = data
       @authorized = true
+      @debugging = false
       @response = Response.new
     end
 
@@ -109,6 +110,19 @@ module CKSHCommander
       unless @authorized
         @response = Response.new("You are unauthorized to use this subcommand!")
       end
+    end
+
+    def debug!
+      @debugging = true
+    end
+
+    def debugging?
+      @debugging
+    end
+
+    def error_message
+      self.class.error_message ||
+        "Something went awry..."
     end
 
     private

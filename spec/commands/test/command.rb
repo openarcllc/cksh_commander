@@ -3,6 +3,7 @@ require "cksh_commander"
 module Test
   class Command < CKSHCommander::Command
     set token: "gIkuvaNzQIHg97ATvDxqgjtO"
+    set error_message: "Bad news..."
 
     desc "test0", "Description."
     def test0
@@ -30,6 +31,15 @@ module Test
     def testprivate
       authorize(["AUTHORIZED"])
       set_response_text("You are authorized!")
+    end
+
+    def testerror
+      nomethod
+    end
+
+    def testerrordebugging
+      debug!
+      nomethod
     end
 
     def ___(text)

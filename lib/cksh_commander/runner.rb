@@ -12,8 +12,10 @@ module CKSHCommander
         cmd = Kernel.const_get(name).new(data)
 
         response = cmd.authenticated? ? cmd.run : Response.new("Invalid token!")
-      rescue NameError
-        response = Response.new("Command not found...")
+      rescue => e
+        text = cmd && cmd.debugging? ? e.message :
+          cmd ? cmd.error_message : "Command not found..."
+        response = Response.new(text)
       end
 
       response
